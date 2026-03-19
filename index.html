@@ -36,9 +36,9 @@
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
-
+ 
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
+ 
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--bg);
@@ -47,10 +47,10 @@ body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
-
+ 
 /* ── Layout ── */
 .app { max-width: 430px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
-
+ 
 .topbar {
   position: sticky; top: 0; z-index: 100;
   background: rgba(248,247,244,0.92);
@@ -62,7 +62,7 @@ body {
 .topbar-inner { display: flex; align-items: center; justify-content: space-between; }
 .app-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
 .app-title span { color: var(--accent); }
-
+ 
 .nav-tabs {
   display: flex; gap: 4px;
   background: var(--surface2);
@@ -84,23 +84,23 @@ body {
   color: var(--text);
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
-
+ 
 .content { flex: 1; overflow-y: auto; padding: 20px 20px calc(var(--safe-bottom) + 100px); }
-
+ 
 /* ── Page visibility ── */
 .page { display: none; }
 .page.active { display: block; }
-
+ 
 /* ── Today page ── */
 .date-header { margin-bottom: 20px; }
 .date-big { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
 .date-sub { font-size: 14px; color: var(--text2); margin-top: 2px; }
-
+ 
 .progress-bar-wrap { background: var(--surface2); border-radius: 100px; height: 6px; margin: 16px 0 20px; overflow: hidden; }
 .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.4s ease; }
-
+ 
 .section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin: 20px 0 10px; }
-
+ 
 .task-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -114,7 +114,7 @@ body {
 }
 .task-card:active { transform: scale(0.98); }
 .task-card.done { opacity: 0.55; }
-
+ 
 .task-check {
   width: 22px; height: 22px; flex-shrink: 0;
   border: 2px solid var(--border);
@@ -128,7 +128,7 @@ body {
 }
 .task-check svg { display: none; }
 .task-card.done .task-check svg { display: block; }
-
+ 
 .task-body { flex: 1; min-width: 0; }
 .task-name { font-size: 15px; font-weight: 500; }
 .task-card.done .task-name { text-decoration: line-through; color: var(--text3); }
@@ -138,7 +138,7 @@ body {
   font-size: 11px; font-weight: 500;
   padding: 2px 8px; border-radius: 20px;
 }
-
+ 
 .task-actions { display: flex; gap: 6px; }
 .icon-btn {
   width: 30px; height: 30px; border-radius: 8px;
@@ -149,7 +149,7 @@ body {
   transition: all 0.15s;
 }
 .icon-btn:hover { background: var(--border); }
-
+ 
 /* ── FAB ── */
 .fab {
   position: fixed;
@@ -167,12 +167,12 @@ body {
   z-index: 50;
 }
 .fab:active { transform: scale(0.93); }
-
+ 
 /* ── Week page ── */
 .week-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .week-nav button { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 16px; color: var(--text2); display: flex; align-items: center; justify-content: center; }
 .week-nav span { font-size: 14px; font-weight: 500; }
-
+ 
 .week-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 20px; }
 .week-day {
   aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -186,11 +186,11 @@ body {
 .week-day.selected { background: var(--accent); color: white; border-color: var(--accent); }
 .week-day.selected .wd-name { color: rgba(255,255,255,0.8); }
 .week-day.today-day:not(.selected) { border-color: var(--accent); color: var(--accent); }
-
+ 
 .week-tasks-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .week-tasks-header span { font-size: 14px; font-weight: 500; }
 .copy-btn { font-size: 12px; color: var(--accent); background: var(--accent-light); border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
-
+ 
 /* ── Stats page ── */
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .stat-card {
@@ -199,7 +199,7 @@ body {
 }
 .stat-num { font-size: 28px; font-weight: 600; letter-spacing: -1px; }
 .stat-lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
-
+ 
 .streak-card {
   background: linear-gradient(135deg, var(--accent), #1a4731);
   border-radius: var(--radius); padding: 20px;
@@ -209,19 +209,19 @@ body {
 .streak-num { font-size: 48px; font-weight: 600; line-height: 1; }
 .streak-label { font-size: 14px; opacity: 0.85; margin-top: 4px; }
 .streak-icon { font-size: 40px; }
-
+ 
 .bar-chart { margin-bottom: 20px; }
 .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .bar-row-label { font-size: 12px; color: var(--text2); width: 28px; text-align: right; flex-shrink: 0; }
 .bar-track { flex: 1; background: var(--surface2); border-radius: 100px; height: 10px; overflow: hidden; }
 .bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.5s ease; }
 .bar-pct { font-size: 12px; color: var(--text2); width: 32px; font-family: 'DM Mono', monospace; }
-
+ 
 .category-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .cat-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; }
 .cat-stat-name { font-size: 12px; color: var(--text2); }
 .cat-stat-count { font-size: 18px; font-weight: 600; margin-top: 2px; }
-
+ 
 /* ── Modal ── */
 .modal-backdrop {
   position: fixed; inset: 0; z-index: 200;
@@ -240,7 +240,7 @@ body {
 .modal-backdrop.open .modal { transform: translateY(0); }
 .modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 100px; margin: 0 auto 20px; }
 .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
-
+ 
 .form-group { margin-bottom: 16px; }
 .form-label { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
 .form-input, .form-select {
@@ -251,9 +251,9 @@ body {
   transition: border-color 0.15s;
 }
 .form-input:focus, .form-select:focus { border-color: var(--accent); }
-
+ 
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
+ 
 .btn-row { display: flex; gap: 10px; margin-top: 20px; }
 .btn {
   flex: 1; padding: 14px;
@@ -264,20 +264,35 @@ body {
 .btn-primary { background: var(--accent); color: white; }
 .btn-primary:active { transform: scale(0.97); }
 .btn-ghost { background: var(--surface2); color: var(--text2); }
-
-/* ── Category badges ── */
+ 
+.day-quick-btn {
+  font-size: 12px; font-weight: 500; padding: 5px 10px;
+  border-radius: 6px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text2);
+  cursor: pointer; transition: all 0.15s;
+}
+.day-quick-btn:active { background: var(--accent-light); color: var(--accent); border-color: var(--accent); }
+ 
+.day-chip {
+  aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text2);
+  font-size: 11px; font-weight: 600; cursor: pointer;
+  transition: all 0.15s; user-select: none;
+}
+.day-chip.selected { background: var(--accent); color: white; border-color: var(--accent); }
 .cat-uyku { background: var(--purple-light); color: var(--purple); }
 .cat-spor { background: var(--accent-light); color: var(--accent); }
 .cat-ders { background: var(--blue-light); color: var(--blue); }
 .cat-hobi { background: var(--amber-light); color: var(--amber); }
 .cat-yemek { background: var(--accent2-light); color: var(--accent2); }
 .cat-diger { background: var(--surface2); color: var(--text2); }
-
+ 
 /* ── Empty ── */
 .empty { text-align: center; padding: 48px 20px; color: var(--text3); }
 .empty-icon { font-size: 40px; margin-bottom: 12px; }
 .empty-text { font-size: 15px; }
-
+ 
 /* ── Notification banner ── */
 .notif-banner {
   background: var(--amber-light); border: 1px solid #f5c068;
@@ -301,7 +316,7 @@ body {
       <button class="nav-tab" onclick="switchPage('stats')">İstatistik</button>
     </div>
   </div>
-
+ 
   <div class="content">
     <!-- TODAY -->
     <div class="page active" id="page-today">
@@ -315,7 +330,7 @@ body {
       </div>
       <div id="today-tasks-wrap"></div>
     </div>
-
+ 
     <!-- WEEK -->
     <div class="page" id="page-week">
       <div class="week-nav">
@@ -330,16 +345,16 @@ body {
       </div>
       <div id="week-tasks-wrap"></div>
     </div>
-
+ 
     <!-- STATS -->
     <div class="page" id="page-stats">
       <div id="stats-content"></div>
     </div>
   </div>
-
+ 
   <button class="fab" onclick="openModal()">+</button>
 </div>
-
+ 
 <!-- Modal -->
 <div class="modal-backdrop" id="modal-backdrop" onclick="closeModalOutside(event)">
   <div class="modal">
@@ -374,35 +389,44 @@ body {
       <label class="form-label">Not (isteğe bağlı)</label>
       <input class="form-input" id="f-note" placeholder="Ek bilgi..." />
     </div>
+    <div class="form-group" id="day-picker-group">
+      <label class="form-label">Hangi günlere eklensin?</label>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+        <button type="button" class="day-quick-btn" onclick="selectAllDays()">Tüm Hafta</button>
+        <button type="button" class="day-quick-btn" onclick="selectWeekdays()">Hafta İçi</button>
+        <button type="button" class="day-quick-btn" onclick="selectWeekend()">Hafta Sonu</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;" id="day-checkboxes"></div>
+    </div>
     <div class="btn-row">
       <button class="btn btn-ghost" onclick="closeModal()">İptal</button>
       <button class="btn btn-primary" onclick="saveTask()">Kaydet</button>
     </div>
   </div>
 </div>
-
+ 
 <script>
 const CAT_NAMES = { spor:'Spor', ders:'Çalışma', yemek:'Yemek', uyku:'Uyku', hobi:'Hobi', diger:'Diğer' };
 const TR_DAYS = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
 const TR_DAYS_SHORT = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
 const TR_MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
-
+ 
 function dateKey(d) {
   return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
-
+ 
 function loadData() {
   try { return JSON.parse(localStorage.getItem('duzenim_v2') || '{}'); } catch(e) { return {}; }
 }
 function saveData(d) { localStorage.setItem('duzenim_v2', JSON.stringify(d)); }
-
+ 
 let data = loadData();
 let today = new Date();
 let selectedDay = new Date(today);
 let weekOffset = 0;
 let editingId = null;
 let currentPage = 'today';
-
+ 
 // ── Helpers ──
 function getWeekStart(d, offset=0) {
   const c = new Date(d);
@@ -410,22 +434,22 @@ function getWeekStart(d, offset=0) {
   c.setHours(0,0,0,0);
   return c;
 }
-
+ 
 function ensureDay(key) {
   if (!data[key]) data[key] = { tasks: [] };
   if (!data[key].tasks) data[key].tasks = [];
 }
-
+ 
 // ── Render Today ──
 function renderToday() {
   const key = dateKey(today);
   ensureDay(key);
   const tasks = [...data[key].tasks].sort((a,b) => a.start.localeCompare(b.start));
-
+ 
   document.getElementById('today-date').textContent =
     today.getDate() + ' ' + TR_MONTHS[today.getMonth()] + ' ' + today.getFullYear();
   document.getElementById('today-dayname').textContent = TR_DAYS[today.getDay()];
-
+ 
   // Notification banner
   const nb = document.getElementById('notif-banner-wrap');
   if ('Notification' in window && Notification.permission === 'default') {
@@ -434,24 +458,24 @@ function renderToday() {
       <div>Hatırlatıcılar için izin gerekli. <button onclick="requestNotif()">İzin Ver</button></div>
     </div>`;
   } else { nb.innerHTML = ''; }
-
+ 
   const done = tasks.filter(t=>t.done).length;
   const pct = tasks.length ? Math.round(done/tasks.length*100) : 0;
   document.getElementById('progress-fill').style.width = pct+'%';
   document.getElementById('today-pct').textContent = '%'+pct+' tamamlandı';
-
+ 
   const wrap = document.getElementById('today-tasks-wrap');
   if (!tasks.length) {
     wrap.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Henüz görev yok.<br>+ butonuyla ekle!</div></div>`;
     return;
   }
-
+ 
   const sections = [
     { label: 'Sabah', min:'00:00', max:'12:00' },
     { label: 'Öğle', min:'12:00', max:'17:00' },
     { label: 'Akşam', min:'17:00', max:'24:00' },
   ];
-
+ 
   let html = '';
   sections.forEach(s => {
     const group = tasks.filter(t => t.start >= s.min && t.start < s.max);
@@ -461,7 +485,7 @@ function renderToday() {
   });
   wrap.innerHTML = html;
 }
-
+ 
 function taskCardHTML(t, key) {
   const cat = t.category||'diger';
   return `<div class="task-card ${t.done?'done':''}" id="tc-${t.id}">
@@ -484,7 +508,7 @@ function taskCardHTML(t, key) {
     </div>
   </div>`;
 }
-
+ 
 // ── Toggle ──
 function toggleTask(key, id) {
   const t = data[key].tasks.find(x=>x.id===id);
@@ -494,7 +518,7 @@ function toggleTask(key, id) {
   if (key === dateKey(today)) renderToday();
   if (currentPage === 'week') renderWeekTasks();
 }
-
+ 
 // ── Delete ──
 function deleteTask(key, id) {
   if (!confirm('Görevi sil?')) return;
@@ -502,7 +526,7 @@ function deleteTask(key, id) {
   saveData(data);
   renderAll();
 }
-
+ 
 // ── Edit ──
 function editTask(key, id) {
   const t = data[key].tasks.find(x=>x.id===id);
@@ -516,9 +540,44 @@ function editTask(key, id) {
   document.getElementById('f-note').value = t.note||'';
   openModal();
 }
-
+ 
+// ── Day Picker ──
+const DAY_LABELS = ['Pzt','Sal','Çar','Per','Cum','Cmt','Paz'];
+let selectedDays = new Set();
+ 
+function renderDayChips() {
+  const wrap = document.getElementById('day-checkboxes');
+  wrap.innerHTML = DAY_LABELS.map((lbl,i) =>
+    `<div class="day-chip ${selectedDays.has(i)?'selected':''}" onclick="toggleDay(${i})">${lbl}</div>`
+  ).join('');
+}
+ 
+function toggleDay(i) {
+  if (selectedDays.has(i)) selectedDays.delete(i);
+  else selectedDays.add(i);
+  renderDayChips();
+}
+ 
+function selectAllDays() { selectedDays = new Set([0,1,2,3,4,5,6]); renderDayChips(); }
+function selectWeekdays() { selectedDays = new Set([0,1,2,3,4]); renderDayChips(); }
+function selectWeekend() { selectedDays = new Set([5,6]); renderDayChips(); }
+ 
+function getBaseDay() {
+  return currentPage === 'week' ? selectedDay : today;
+}
+ 
 // ── Modal ──
-function openModal() { document.getElementById('modal-backdrop').classList.add('open'); document.getElementById('f-name').focus(); }
+function openModal() {
+  // default: only today/selected day
+  const base = getBaseDay();
+  // dayOfWeek: Mon=0..Sun=6
+  const dow = (base.getDay() + 6) % 7;
+  selectedDays = new Set([dow]);
+  renderDayChips();
+  document.getElementById('day-picker-group').style.display = editingId ? 'none' : 'block';
+  document.getElementById('modal-backdrop').classList.add('open');
+  document.getElementById('f-name').focus();
+}
 function closeModal() {
   document.getElementById('modal-backdrop').classList.remove('open');
   editingId = null;
@@ -527,14 +586,14 @@ function closeModal() {
   document.getElementById('f-note').value='';
 }
 function closeModalOutside(e) { if (e.target === document.getElementById('modal-backdrop')) closeModal(); }
-
+ 
 function saveTask() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) { document.getElementById('f-name').focus(); return; }
-  const key = dateKey(currentPage==='week' ? selectedDay : today);
-  ensureDay(key);
-
+ 
   if (editingId) {
+    const key = dateKey(currentPage==='week' ? selectedDay : today);
+    ensureDay(key);
     const t = data[key].tasks.find(x=>x.id===editingId);
     if (t) {
       t.name = name;
@@ -544,8 +603,9 @@ function saveTask() {
       t.note = document.getElementById('f-note').value.trim();
     }
   } else {
-    const task = {
-      id: Date.now().toString(),
+    // Add to each selected day in the current week
+    const ws = getWeekStart(today, weekOffset);
+    const taskBase = {
       name,
       start: document.getElementById('f-start').value,
       end: document.getElementById('f-end').value,
@@ -553,23 +613,30 @@ function saveTask() {
       note: document.getElementById('f-note').value.trim(),
       done: false
     };
-    data[key].tasks.push(task);
-    scheduleNotification(task);
+    selectedDays.forEach(dow => {
+      // dow: 0=Mon..6=Sun, JS getDay: 0=Sun..6=Sat
+      const d = new Date(ws); d.setDate(d.getDate() + dow);
+      const key = dateKey(d);
+      ensureDay(key);
+      const task = { ...taskBase, id: Date.now().toString() + Math.random() };
+      data[key].tasks.push(task);
+      if (dateKey(d) === dateKey(today)) scheduleNotification(task);
+    });
   }
   saveData(data);
   closeModal();
   renderAll();
 }
-
+ 
 // ── Week ──
 function shiftWeek(dir) { weekOffset += dir; renderWeek(); }
-
+ 
 function renderWeek() {
   const ws = getWeekStart(today, weekOffset);
   const we = new Date(ws); we.setDate(we.getDate()+6);
   document.getElementById('week-label').textContent =
     ws.getDate()+' '+TR_MONTHS[ws.getMonth()]+' – '+we.getDate()+' '+TR_MONTHS[we.getMonth()];
-
+ 
   const grid = document.getElementById('week-grid');
   grid.innerHTML = '';
   for (let i=0; i<7; i++) {
@@ -586,14 +653,14 @@ function renderWeek() {
   }
   renderWeekTasks();
 }
-
+ 
 function renderWeekTasks() {
   const key = dateKey(selectedDay);
   ensureDay(key);
   const tasks = [...data[key].tasks].sort((a,b)=>a.start.localeCompare(b.start));
   document.getElementById('week-sel-label').textContent =
     TR_DAYS[selectedDay.getDay()] + ', ' + selectedDay.getDate() + ' ' + TR_MONTHS[selectedDay.getMonth()];
-
+ 
   const wrap = document.getElementById('week-tasks-wrap');
   if (!tasks.length) {
     wrap.innerHTML = `<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Bu gün için görev yok.</div></div>`;
@@ -601,7 +668,7 @@ function renderWeekTasks() {
   }
   wrap.innerHTML = tasks.map(t=>taskCardHTML(t,key)).join('');
 }
-
+ 
 function copyTemplate() {
   const srcKey = dateKey(selectedDay);
   const dstKey = dateKey(today);
@@ -614,7 +681,7 @@ function copyTemplate() {
   saveData(data);
   renderAll();
 }
-
+ 
 // ── Stats ──
 function renderStats() {
   const last7 = [];
@@ -622,10 +689,10 @@ function renderStats() {
     const d = new Date(today); d.setDate(d.getDate()-i);
     last7.push(d);
   }
-
+ 
   let totalDone=0, totalTasks=0, streak=0;
   const catCounts = { spor:0, ders:0, yemek:0, uyku:0, hobi:0, diger:0 };
-
+ 
   // Streak
   let checkDay = new Date(today);
   while(true) {
@@ -637,7 +704,7 @@ function renderStats() {
     streak++;
     checkDay.setDate(checkDay.getDate()-1);
   }
-
+ 
   Object.keys(data).forEach(k => {
     const d = data[k];
     if (d && d.tasks) {
@@ -648,7 +715,7 @@ function renderStats() {
       });
     }
   });
-
+ 
   const bars = last7.map(d => {
     const k = dateKey(d);
     const day = data[k];
@@ -656,9 +723,9 @@ function renderStats() {
     const done = day.tasks.filter(t=>t.done).length;
     return { label: TR_DAYS_SHORT[d.getDay()], pct: Math.round(done/day.tasks.length*100) };
   });
-
+ 
   const avgPct = totalTasks ? Math.round(totalDone/totalTasks*100) : 0;
-
+ 
   document.getElementById('stats-content').innerHTML = `
     <div class="streak-card">
       <div>
@@ -692,14 +759,14 @@ function renderStats() {
     </div>
   `;
 }
-
+ 
 // ── Notifications ──
 function requestNotif() {
   Notification.requestPermission().then(p => {
     document.getElementById('notif-banner-wrap').innerHTML = '';
   });
 }
-
+ 
 function scheduleNotification(task) {
   if (!('Notification' in window) || Notification.permission !== 'granted') return;
   const [h, m] = task.start.split(':').map(Number);
@@ -715,7 +782,7 @@ function scheduleNotification(task) {
     }, diff);
   }
 }
-
+ 
 // ── Navigation ──
 function switchPage(page) {
   currentPage = page;
@@ -726,13 +793,13 @@ function switchPage(page) {
   if (page==='week') { renderWeek(); }
   if (page==='stats') { renderStats(); }
 }
-
+ 
 function renderAll() {
   renderToday();
   if (currentPage==='week') renderWeek();
   if (currentPage==='stats') renderStats();
 }
-
+ 
 // ── Init with sample data ──
 function seedIfEmpty() {
   const key = dateKey(today);
@@ -752,7 +819,7 @@ function seedIfEmpty() {
   data[key].tasks = samples;
   saveData(data);
 }
-
+ 
 seedIfEmpty();
 renderToday();
 </script>
