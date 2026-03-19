@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Düzenim">
+<meta name="theme-color" content="#ffffff">
+<title>Düzenim</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f7f4;
+  --surface: #ffffff;
+  --surface2: #f2f1ee;
+  --border: #e8e6e1;
+  --text: #1a1916;
+  --text2: #6b6860;
+  --text3: #a8a49e;
+  --accent: #2d6a4f;
+  --accent-light: #e8f5ee;
+  --accent2: #e07b39;
+  --accent2-light: #fdf0e8;
+  --danger: #c0392b;
+  --danger-light: #fdf0ef;
+  --purple: #7c5cbf;
+  --purple-light: #f0ecfa;
+  --blue: #2563a8;
+  --blue-light: #eaf2fd;
+  --amber: #b45309;
+  --amber-light: #fef9ec;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ── */
+.app { max-width: 430px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(248,247,244,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: calc(var(--safe-top) + 16px) 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.topbar-inner { display: flex; align-items: center; justify-content: space-between; }
+.app-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
+.app-title span { color: var(--accent); }
+
+.nav-tabs {
+  display: flex; gap: 4px;
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 3px;
+  margin-top: 12px;
+}
+.nav-tab {
+  flex: 1; text-align: center;
+  font-size: 13px; font-weight: 500;
+  padding: 7px 4px;
+  border-radius: 7px;
+  border: none; background: none;
+  color: var(--text2); cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+.content { flex: 1; overflow-y: auto; padding: 20px 20px calc(var(--safe-bottom) + 100px); }
+
+/* ── Page visibility ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── Today page ── */
+.date-header { margin-bottom: 20px; }
+.date-big { font-size: 28px; font-weight: 600; letter-spacing: -0.5px; }
+.date-sub { font-size: 14px; color: var(--text2); margin-top: 2px; }
+
+.progress-bar-wrap { background: var(--surface2); border-radius: 100px; height: 6px; margin: 16px 0 20px; overflow: hidden; }
+.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.4s ease; }
+
+.section-title { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); margin: 20px 0 10px; }
+
+.task-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 12px;
+  transition: all 0.15s;
+  cursor: pointer;
+  position: relative;
+}
+.task-card:active { transform: scale(0.98); }
+.task-card.done { opacity: 0.55; }
+
+.task-check {
+  width: 22px; height: 22px; flex-shrink: 0;
+  border: 2px solid var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.task-card.done .task-check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.task-check svg { display: none; }
+.task-card.done .task-check svg { display: block; }
+
+.task-body { flex: 1; min-width: 0; }
+.task-name { font-size: 15px; font-weight: 500; }
+.task-card.done .task-name { text-decoration: line-through; color: var(--text3); }
+.task-meta { display: flex; gap: 6px; align-items: center; margin-top: 4px; flex-wrap: wrap; }
+.task-time { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--text2); }
+.badge {
+  font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 20px;
+}
+
+.task-actions { display: flex; gap: 6px; }
+.icon-btn {
+  width: 30px; height: 30px; border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text2); font-size: 14px;
+  transition: all 0.15s;
+}
+.icon-btn:hover { background: var(--border); }
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 24px);
+  right: calc(50% - 215px + 20px);
+  width: 52px; height: 52px;
+  background: var(--accent);
+  color: white;
+  border: none; border-radius: 16px;
+  font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(45,106,79,0.4);
+  transition: transform 0.15s;
+  z-index: 50;
+}
+.fab:active { transform: scale(0.93); }
+
+/* ── Week page ── */
+.week-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.week-nav button { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; width: 34px; height: 34px; cursor: pointer; font-size: 16px; color: var(--text2); display: flex; align-items: center; justify-content: center; }
+.week-nav span { font-size: 14px; font-weight: 500; }
+
+.week-days { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; margin-bottom: 20px; }
+.week-day {
+  aspect-ratio: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  border-radius: 10px; cursor: pointer; border: 1px solid transparent;
+  font-size: 12px; color: var(--text2); gap: 2px; transition: all 0.15s;
+}
+.week-day .wd-name { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.week-day .wd-num { font-size: 16px; font-weight: 600; }
+.week-day .wd-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0; }
+.week-day.has-tasks .wd-dot { opacity: 1; }
+.week-day.selected { background: var(--accent); color: white; border-color: var(--accent); }
+.week-day.selected .wd-name { color: rgba(255,255,255,0.8); }
+.week-day.today-day:not(.selected) { border-color: var(--accent); color: var(--accent); }
+
+.week-tasks-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.week-tasks-header span { font-size: 14px; font-weight: 500; }
+.copy-btn { font-size: 12px; color: var(--accent); background: var(--accent-light); border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; }
+
+/* ── Stats page ── */
+.stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px;
+}
+.stat-num { font-size: 28px; font-weight: 600; letter-spacing: -1px; }
+.stat-lbl { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+.streak-card {
+  background: linear-gradient(135deg, var(--accent), #1a4731);
+  border-radius: var(--radius); padding: 20px;
+  color: white; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 16px;
+}
+.streak-num { font-size: 48px; font-weight: 600; line-height: 1; }
+.streak-label { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+.streak-icon { font-size: 40px; }
+
+.bar-chart { margin-bottom: 20px; }
+.bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bar-row-label { font-size: 12px; color: var(--text2); width: 28px; text-align: right; flex-shrink: 0; }
+.bar-track { flex: 1; background: var(--surface2); border-radius: 100px; height: 10px; overflow: hidden; }
+.bar-fill { height: 100%; background: var(--accent); border-radius: 100px; transition: width 0.5s ease; }
+.bar-pct { font-size: 12px; color: var(--text2); width: 32px; font-family: 'DM Mono', monospace; }
+
+.category-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.cat-stat { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; }
+.cat-stat-name { font-size: 12px; color: var(--text2); }
+.cat-stat-count { font-size: 18px; font-weight: 600; margin-top: 2px; }
+
+/* ── Modal ── */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity 0.25s;
+}
+.modal-backdrop.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface);
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px calc(var(--safe-bottom) + 20px);
+  width: 100%; max-width: 430px;
+  transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-backdrop.open .modal { transform: translateY(0); }
+.modal-handle { width: 36px; height: 4px; background: var(--border); border-radius: 100px; margin: 0 auto 20px; }
+.modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+
+.form-group { margin-bottom: 16px; }
+.form-label { font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 6px; display: block; }
+.form-input, .form-select {
+  width: 100%; padding: 12px 14px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+  font-size: 15px; color: var(--text); outline: none;
+  transition: border-color 0.15s;
+}
+.form-input:focus, .form-select:focus { border-color: var(--accent); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.btn-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn {
+  flex: 1; padding: 14px;
+  border-radius: var(--radius-sm); border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+}
+.btn-primary { background: var(--accent); color: white; }
+.btn-primary:active { transform: scale(0.97); }
+.btn-ghost { background: var(--surface2); color: var(--text2); }
+
+/* ── Category badges ── */
+.cat-uyku { background: var(--purple-light); color: var(--purple); }
+.cat-spor { background: var(--accent-light); color: var(--accent); }
+.cat-ders { background: var(--blue-light); color: var(--blue); }
+.cat-hobi { background: var(--amber-light); color: var(--amber); }
+.cat-yemek { background: var(--accent2-light); color: var(--accent2); }
+.cat-diger { background: var(--surface2); color: var(--text2); }
+
+/* ── Empty ── */
+.empty { text-align: center; padding: 48px 20px; color: var(--text3); }
+.empty-icon { font-size: 40px; margin-bottom: 12px; }
+.empty-text { font-size: 15px; }
+
+/* ── Notification banner ── */
+.notif-banner {
+  background: var(--amber-light); border: 1px solid #f5c068;
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  display: flex; gap: 10px; align-items: flex-start;
+  margin-bottom: 16px; font-size: 13px; color: var(--amber);
+}
+.notif-banner button { background: none; border: none; color: var(--amber); font-weight: 600; cursor: pointer; padding: 0; font-size: 13px; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="app-title">Düzen<span>im</span></div>
+      <div id="today-pct" style="font-size:13px;color:var(--text2);font-weight:500;">%0 tamamlandı</div>
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchPage('today')">Bugün</button>
+      <button class="nav-tab" onclick="switchPage('week')">Hafta</button>
+      <button class="nav-tab" onclick="switchPage('stats')">İstatistik</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- TODAY -->
+    <div class="page active" id="page-today">
+      <div class="date-header">
+        <div class="date-big" id="today-date">—</div>
+        <div class="date-sub" id="today-dayname">—</div>
+      </div>
+      <div id="notif-banner-wrap"></div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+      <div id="today-tasks-wrap"></div>
+    </div>
+
+    <!-- WEEK -->
+    <div class="page" id="page-week">
+      <div class="week-nav">
+        <button onclick="shiftWeek(-1)">‹</button>
+        <span id="week-label">Bu Hafta</span>
+        <button onclick="shiftWeek(1)">›</button>
+      </div>
+      <div class="week-days" id="week-grid"></div>
+      <div class="week-tasks-header">
+        <span id="week-sel-label">Seçili gün</span>
+        <button class="copy-btn" onclick="copyTemplate()">Bugüne kopyala</button>
+      </div>
+      <div id="week-tasks-wrap"></div>
+    </div>
+
+    <!-- STATS -->
+    <div class="page" id="page-stats">
+      <div id="stats-content"></div>
+    </div>
+  </div>
+
+  <button class="fab" onclick="openModal()">+</button>
+</div>
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Görev Ekle</div>
+    <div class="form-group">
+      <label class="form-label">Görev adı</label>
+      <input class="form-input" id="f-name" placeholder="Ör: Sabah koşusu" />
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Başlangıç</label>
+        <input class="form-input" id="f-start" type="time" value="08:00" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Bitiş</label>
+        <input class="form-input" id="f-end" type="time" value="09:00" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Kategori</label>
+      <select class="form-select" id="f-cat">
+        <option value="spor">🏃 Spor/Egzersiz</option>
+        <option value="ders">📚 Çalışma/Ders</option>
+        <option value="yemek">🍽 Yemek</option>
+        <option value="uyku">😴 Uyku</option>
+        <option value="hobi">🎨 Hobi</option>
+        <option value="diger">📌 Diğer</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Not (isteğe bağlı)</label>
+      <input class="form-input" id="f-note" placeholder="Ek bilgi..." />
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-ghost" onclick="closeModal()">İptal</button>
+      <button class="btn btn-primary" onclick="saveTask()">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const CAT_NAMES = { spor:'Spor', ders:'Çalışma', yemek:'Yemek', uyku:'Uyku', hobi:'Hobi', diger:'Diğer' };
+const TR_DAYS = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+const TR_DAYS_SHORT = ['Paz','Pzt','Sal','Çar','Per','Cum','Cmt'];
+const TR_MONTHS = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+
+function dateKey(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem('duzenim_v2') || '{}'); } catch(e) { return {}; }
+}
+function saveData(d) { localStorage.setItem('duzenim_v2', JSON.stringify(d)); }
+
+let data = loadData();
+let today = new Date();
+let selectedDay = new Date(today);
+let weekOffset = 0;
+let editingId = null;
+let currentPage = 'today';
+
+// ── Helpers ──
+function getWeekStart(d, offset=0) {
+  const c = new Date(d);
+  c.setDate(c.getDate() - c.getDay() + 1 + offset*7);
+  c.setHours(0,0,0,0);
+  return c;
+}
+
+function ensureDay(key) {
+  if (!data[key]) data[key] = { tasks: [] };
+  if (!data[key].tasks) data[key].tasks = [];
+}
+
+// ── Render Today ──
+function renderToday() {
+  const key = dateKey(today);
+  ensureDay(key);
+  const tasks = [...data[key].tasks].sort((a,b) => a.start.localeCompare(b.start));
+
+  document.getElementById('today-date').textContent =
+    today.getDate() + ' ' + TR_MONTHS[today.getMonth()] + ' ' + today.getFullYear();
+  document.getElementById('today-dayname').textContent = TR_DAYS[today.getDay()];
+
+  // Notification banner
+  const nb = document.getElementById('notif-banner-wrap');
+  if ('Notification' in window && Notification.permission === 'default') {
+    nb.innerHTML = `<div class="notif-banner">
+      <span style="font-size:16px">🔔</span>
+      <div>Hatırlatıcılar için izin gerekli. <button onclick="requestNotif()">İzin Ver</button></div>
+    </div>`;
+  } else { nb.innerHTML = ''; }
+
+  const done = tasks.filter(t=>t.done).length;
+  const pct = tasks.length ? Math.round(done/tasks.length*100) : 0;
+  document.getElementById('progress-fill').style.width = pct+'%';
+  document.getElementById('today-pct').textContent = '%'+pct+' tamamlandı';
+
+  const wrap = document.getElementById('today-tasks-wrap');
+  if (!tasks.length) {
+    wrap.innerHTML = `<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">Henüz görev yok.<br>+ butonuyla ekle!</div></div>`;
+    return;
+  }
+
+  const sections = [
+    { label: 'Sabah', min:'00:00', max:'12:00' },
+    { label: 'Öğle', min:'12:00', max:'17:00' },
+    { label: 'Akşam', min:'17:00', max:'24:00' },
+  ];
+
+  let html = '';
+  sections.forEach(s => {
+    const group = tasks.filter(t => t.start >= s.min && t.start < s.max);
+    if (!group.length) return;
+    html += `<div class="section-title">${s.label}</div>`;
+    group.forEach(t => { html += taskCardHTML(t, key); });
+  });
+  wrap.innerHTML = html;
+}
+
+function taskCardHTML(t, key) {
+  const cat = t.category||'diger';
+  return `<div class="task-card ${t.done?'done':''}" id="tc-${t.id}">
+    <div class="task-check" onclick="toggleTask('${key}','${t.id}')">
+      <svg width="11" height="8" viewBox="0 0 11 8" fill="none">
+        <path d="M1 4L4 7L10 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="task-body">
+      <div class="task-name">${t.name}</div>
+      <div class="task-meta">
+        <span class="task-time">${t.start}${t.end?' – '+t.end:''}</span>
+        <span class="badge cat-${cat}">${CAT_NAMES[cat]}</span>
+        ${t.note ? `<span style="font-size:12px;color:var(--text3)">${t.note}</span>` : ''}
+      </div>
+    </div>
+    <div class="task-actions">
+      <div class="icon-btn" onclick="editTask('${key}','${t.id}')">✎</div>
+      <div class="icon-btn" onclick="deleteTask('${key}','${t.id}')" style="color:var(--danger)">✕</div>
+    </div>
+  </div>`;
+}
+
+// ── Toggle ──
+function toggleTask(key, id) {
+  const t = data[key].tasks.find(x=>x.id===id);
+  if (!t) return;
+  t.done = !t.done;
+  saveData(data);
+  if (key === dateKey(today)) renderToday();
+  if (currentPage === 'week') renderWeekTasks();
+}
+
+// ── Delete ──
+function deleteTask(key, id) {
+  if (!confirm('Görevi sil?')) return;
+  data[key].tasks = data[key].tasks.filter(x=>x.id!==id);
+  saveData(data);
+  renderAll();
+}
+
+// ── Edit ──
+function editTask(key, id) {
+  const t = data[key].tasks.find(x=>x.id===id);
+  if (!t) return;
+  editingId = id;
+  document.getElementById('modal-title').textContent = 'Görevi Düzenle';
+  document.getElementById('f-name').value = t.name;
+  document.getElementById('f-start').value = t.start;
+  document.getElementById('f-end').value = t.end||'';
+  document.getElementById('f-cat').value = t.category||'diger';
+  document.getElementById('f-note').value = t.note||'';
+  openModal();
+}
+
+// ── Modal ──
+function openModal() { document.getElementById('modal-backdrop').classList.add('open'); document.getElementById('f-name').focus(); }
+function closeModal() {
+  document.getElementById('modal-backdrop').classList.remove('open');
+  editingId = null;
+  document.getElementById('modal-title').textContent = 'Görev Ekle';
+  document.getElementById('f-name').value='';
+  document.getElementById('f-note').value='';
+}
+function closeModalOutside(e) { if (e.target === document.getElementById('modal-backdrop')) closeModal(); }
+
+function saveTask() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { document.getElementById('f-name').focus(); return; }
+  const key = dateKey(currentPage==='week' ? selectedDay : today);
+  ensureDay(key);
+
+  if (editingId) {
+    const t = data[key].tasks.find(x=>x.id===editingId);
+    if (t) {
+      t.name = name;
+      t.start = document.getElementById('f-start').value;
+      t.end = document.getElementById('f-end').value;
+      t.category = document.getElementById('f-cat').value;
+      t.note = document.getElementById('f-note').value.trim();
+    }
+  } else {
+    const task = {
+      id: Date.now().toString(),
+      name,
+      start: document.getElementById('f-start').value,
+      end: document.getElementById('f-end').value,
+      category: document.getElementById('f-cat').value,
+      note: document.getElementById('f-note').value.trim(),
+      done: false
+    };
+    data[key].tasks.push(task);
+    scheduleNotification(task);
+  }
+  saveData(data);
+  closeModal();
+  renderAll();
+}
+
+// ── Week ──
+function shiftWeek(dir) { weekOffset += dir; renderWeek(); }
+
+function renderWeek() {
+  const ws = getWeekStart(today, weekOffset);
+  const we = new Date(ws); we.setDate(we.getDate()+6);
+  document.getElementById('week-label').textContent =
+    ws.getDate()+' '+TR_MONTHS[ws.getMonth()]+' – '+we.getDate()+' '+TR_MONTHS[we.getMonth()];
+
+  const grid = document.getElementById('week-grid');
+  grid.innerHTML = '';
+  for (let i=0; i<7; i++) {
+    const d = new Date(ws); d.setDate(d.getDate()+i);
+    const k = dateKey(d);
+    const hasTasks = data[k] && data[k].tasks && data[k].tasks.length > 0;
+    const isToday = dateKey(d)===dateKey(today);
+    const isSel = dateKey(d)===dateKey(selectedDay);
+    const div = document.createElement('div');
+    div.className = 'week-day' + (hasTasks?' has-tasks':'') + (isToday?' today-day':'') + (isSel?' selected':'');
+    div.innerHTML = `<div class="wd-name">${TR_DAYS_SHORT[d.getDay()]}</div><div class="wd-num">${d.getDate()}</div><div class="wd-dot"></div>`;
+    div.onclick = () => { selectedDay = new Date(d); renderWeek(); renderWeekTasks(); };
+    grid.appendChild(div);
+  }
+  renderWeekTasks();
+}
+
+function renderWeekTasks() {
+  const key = dateKey(selectedDay);
+  ensureDay(key);
+  const tasks = [...data[key].tasks].sort((a,b)=>a.start.localeCompare(b.start));
+  document.getElementById('week-sel-label').textContent =
+    TR_DAYS[selectedDay.getDay()] + ', ' + selectedDay.getDate() + ' ' + TR_MONTHS[selectedDay.getMonth()];
+
+  const wrap = document.getElementById('week-tasks-wrap');
+  if (!tasks.length) {
+    wrap.innerHTML = `<div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Bu gün için görev yok.</div></div>`;
+    return;
+  }
+  wrap.innerHTML = tasks.map(t=>taskCardHTML(t,key)).join('');
+}
+
+function copyTemplate() {
+  const srcKey = dateKey(selectedDay);
+  const dstKey = dateKey(today);
+  if (srcKey === dstKey) { alert('Seçili gün zaten bugün!'); return; }
+  ensureDay(srcKey); ensureDay(dstKey);
+  if (!data[srcKey].tasks.length) { alert('Kopyalanacak görev yok.'); return; }
+  if (!confirm('Bu günün görevlerini bugüne kopyala?')) return;
+  const copies = data[srcKey].tasks.map(t=>({...t, id: Date.now().toString()+Math.random(), done:false}));
+  data[dstKey].tasks.push(...copies);
+  saveData(data);
+  renderAll();
+}
+
+// ── Stats ──
+function renderStats() {
+  const last7 = [];
+  for (let i=6; i>=0; i--) {
+    const d = new Date(today); d.setDate(d.getDate()-i);
+    last7.push(d);
+  }
+
+  let totalDone=0, totalTasks=0, streak=0;
+  const catCounts = { spor:0, ders:0, yemek:0, uyku:0, hobi:0, diger:0 };
+
+  // Streak
+  let checkDay = new Date(today);
+  while(true) {
+    const k = dateKey(checkDay);
+    const day = data[k];
+    if (!day || !day.tasks.length) break;
+    const allDone = day.tasks.every(t=>t.done);
+    if (!allDone) break;
+    streak++;
+    checkDay.setDate(checkDay.getDate()-1);
+  }
+
+  Object.keys(data).forEach(k => {
+    const d = data[k];
+    if (d && d.tasks) {
+      d.tasks.forEach(t => {
+        totalTasks++;
+        if (t.done) totalDone++;
+        if (catCounts[t.category] !== undefined) catCounts[t.category]++;
+      });
+    }
+  });
+
+  const bars = last7.map(d => {
+    const k = dateKey(d);
+    const day = data[k];
+    if (!day || !day.tasks.length) return { label: TR_DAYS_SHORT[d.getDay()], pct: 0 };
+    const done = day.tasks.filter(t=>t.done).length;
+    return { label: TR_DAYS_SHORT[d.getDay()], pct: Math.round(done/day.tasks.length*100) };
+  });
+
+  const avgPct = totalTasks ? Math.round(totalDone/totalTasks*100) : 0;
+
+  document.getElementById('stats-content').innerHTML = `
+    <div class="streak-card">
+      <div>
+        <div class="streak-num">${streak}</div>
+        <div class="streak-label">günlük seri 🔥</div>
+      </div>
+      <div style="margin-left:auto;opacity:0.6;font-size:13px;line-height:1.6">Üst üste tüm<br>görevleri<br>tamamladın</div>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">${totalTasks}</div><div class="stat-lbl">toplam görev</div></div>
+      <div class="stat-card"><div class="stat-num">${totalDone}</div><div class="stat-lbl">tamamlanan</div></div>
+      <div class="stat-card"><div class="stat-num">%${avgPct}</div><div class="stat-lbl">genel başarı</div></div>
+      <div class="stat-card"><div class="stat-num">${Object.keys(data).length}</div><div class="stat-lbl">aktif gün</div></div>
+    </div>
+    <div class="section-title">Son 7 gün</div>
+    <div class="bar-chart" style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px">
+      ${bars.map(b=>`<div class="bar-row">
+        <div class="bar-row-label">${b.label}</div>
+        <div class="bar-track"><div class="bar-fill" style="width:${b.pct}%"></div></div>
+        <div class="bar-pct">%${b.pct}</div>
+      </div>`).join('')}
+    </div>
+    <div class="section-title">Kategori dağılımı</div>
+    <div class="category-stats">
+      ${Object.entries(catCounts).map(([cat,count])=>`
+        <div class="cat-stat">
+          <div class="cat-stat-name"><span class="badge cat-${cat}">${CAT_NAMES[cat]}</span></div>
+          <div class="cat-stat-count">${count}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ── Notifications ──
+function requestNotif() {
+  Notification.requestPermission().then(p => {
+    document.getElementById('notif-banner-wrap').innerHTML = '';
+  });
+}
+
+function scheduleNotification(task) {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const [h, m] = task.start.split(':').map(Number);
+  const fireAt = new Date(today);
+  fireAt.setHours(h, m-5, 0, 0);
+  const diff = fireAt - Date.now();
+  if (diff > 0) {
+    setTimeout(() => {
+      new Notification('Düzenim – Yaklaşan Görev', {
+        body: task.start + ' – ' + task.name,
+        icon: '/favicon.ico'
+      });
+    }, diff);
+  }
+}
+
+// ── Navigation ──
+function switchPage(page) {
+  currentPage = page;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  event.target.classList.add('active');
+  if (page==='week') { renderWeek(); }
+  if (page==='stats') { renderStats(); }
+}
+
+function renderAll() {
+  renderToday();
+  if (currentPage==='week') renderWeek();
+  if (currentPage==='stats') renderStats();
+}
+
+// ── Init with sample data ──
+function seedIfEmpty() {
+  const key = dateKey(today);
+  ensureDay(key);
+  if (data[key].tasks.length > 0) return;
+  const samples = [
+    { id:'s1', name:'Uyan & Uyku Takibi', start:'06:30', end:'06:45', category:'uyku', note:'Kalite puanla', done:false },
+    { id:'s2', name:'Sabah Koşusu', start:'07:00', end:'07:45', category:'spor', note:'5 km hedef', done:false },
+    { id:'s3', name:'Kahvaltı', start:'08:00', end:'08:30', category:'yemek', note:'', done:false },
+    { id:'s4', name:'Çalışma Bloğu 1', start:'09:00', end:'11:00', category:'ders', note:'Pomodoro tekniği', done:false },
+    { id:'s5', name:'Öğle Yemeği', start:'12:30', end:'13:00', category:'yemek', note:'', done:false },
+    { id:'s6', name:'Çalışma Bloğu 2', start:'14:00', end:'16:00', category:'ders', note:'', done:false },
+    { id:'s7', name:'Akşam Antrenmanı', start:'17:30', end:'18:30', category:'spor', note:'', done:false },
+    { id:'s8', name:'Hobi Zamanı', start:'20:00', end:'21:30', category:'hobi', note:'Kitap veya müzik', done:false },
+    { id:'s9', name:'Uyku', start:'22:30', end:'06:30', category:'uyku', note:'7.5 saat hedef', done:false },
+  ];
+  data[key].tasks = samples;
+  saveData(data);
+}
+
+seedIfEmpty();
+renderToday();
+</script>
+</body>
+</html>
